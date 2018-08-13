@@ -1,0 +1,135 @@
+@mixin clearfix {
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+@mixin transition($sec, $type) {
+    -webkit-transition: all $type $sec;
+    -moz-transition: all $type $sec;
+    -o-transition: all $type $sec;
+    transition: all $type $sec;
+}
+
+@mixin transition-timing($type) {
+    -webkit-transition-timing-function: $type;
+    -moz-transition-timing-function: $type;
+    -ms-transition-timing-function: $type;
+    -o-transition-timing-function: $type;
+    transition-timing-function: $type;
+}
+
+@mixin animate($name, $sec) {
+    -webkit-animation: $sec $name;
+    -moz-animation: $sec $name;
+    -o-animation: $sec $name;
+    animation: $sec $name;
+}
+
+@mixin transform ($value) {
+    transform: $value;
+    -ms-transform: $value;
+    -webkit-transform: $value;
+}
+
+@mixin transitionDuration ($duration) {
+    transition-duration: $duration;
+    -webkit-transition-duration: $duration;
+}
+
+@mixin linear-gradient-b($args...) {
+    background-image: -o-linear-gradient($args);
+    background-image: -moz-linear-gradient($args);
+    background-image: -webkit-linear-gradient($args);
+    background-image: linear-gradient($args);
+}
+
+@mixin absCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin absRight {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    transform: translate(-100%, 0);
+}
+
+@mixin font-size($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+}
+
+@mixin filter($filter-type, $filter-amount) {
+    -webkit-filter: $filter-type + unquote('(#{$filter-amount})');
+    -moz-filter: $filter-type + unquote('(#{$filter-amount})');
+    -ms-filter: $filter-type + unquote('(#{$filter-amount})');
+    -o-filter: $filter-type + unquote('(#{$filter-amount})');
+    filter: $filter-type + unquote('(#{$filter-amount})');
+}
+
+@mixin when-inside($context) {
+    #{$context} & {
+        @content;
+    }
+}
+
+@mixin when-has($context) {
+    & #{$context} {
+        @content;
+    }
+}
+
+// MEDIA QUERY MANAGER
+/*
+0 - 600px:      Phone
+600 - 900px:    Tablet portrait
+900 - 1200px:   Tablet landscape
+[1200 - 1800] is where our normal styles apply
+1800px + :      Big desktop
+$breakpoint arguement choices:
+- phone
+- tab-port
+- tab-land
+- big-desktop
+ORDER: Base + typography > general layout + grid > page layout > components
+1em = 16px
+*/
+@mixin respond($breakpoint) {
+    @if $breakpoint==phone {
+        @media only screen and (max-width: 37.5em) {
+            @content
+        }
+        ; //600px
+    }
+    @if $breakpoint==tab-port {
+        @media only screen and (max-width: 56.25em) {
+            @content
+        }
+        ; //900px
+    }
+    @if $breakpoint==tab-land {
+        @media only screen and (max-width: 75em) {
+            @content
+        }
+        ; //1200px
+    }
+    @if $breakpoint==big-desktop {
+        @media only screen and (min-width: 112.5em) {
+            @content
+        }
+        ; //1800
+    }
+}

@@ -1,0 +1,31 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    /* 16 * 62.5 = 10 */ 
+    /* so 1rem = 10px if user doesn't change font-size */ 
+    font-size: 62.5% !important; 
+}
+
+body {
+    box-sizing: border-box;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+    color: $color-white;
+    cursor: pointer;
+}
+
+button:link,button:visited {
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: transparent;
+}
