@@ -1,24 +1,24 @@
-;( function (global, factory) {
+;( function (global, Vector, factory) {
 
     // For CommonJS and CommonJS-like environments where a proper window is present,
 	// execute the factory 
     if ( typeof module === "object" && typeof module.exports === "object" ) {
 		module.exports = global.document ?
-			factory( global, true ) :
-			function( w ) {
+			factory( global, Vector, true ) :
+			function( w, Vector ) {
 				if ( !w.document ) {
 					throw new Error( "This requires a window with a document" );
 				}
-				return factory( w );
+				return factory( w, Vector );
 			};
 	} else {
-		factory( global );
+		factory( global, Vector );
 	}
     
 // Pass this if window is not defined yet
-}(typeof window !== "undefined" ? window : this, function( global, noGlobal ) {
+}(typeof window !== "undefined" ? window : this, Vector, function( global, Vector, noGlobal ) {
 
-    const graverty = 9.8, // 重力
+    const graverty = 5, // 重力
           friction = 0.8,  // 摩擦力
           defaultColor = 'white';
     var Ball = function(x, y, radius, color) {
@@ -32,10 +32,7 @@
         // V = V0 + AT
         // X0 = X0 + VT 
         // F = ma => F 表示物體所受淨外力，m為物體質量, a 為物體的加速度。
-        // 布朗運動 (隨機運動)
-        // sinθ => 對 / 斜 => b / c => 取Y軸         C／|B
-        // cosθ => 鄰 / 斜 => a / c => 取X軸          ￣ 
-        // tanθ => b / a ( atan(b/a) = θ )            A
+        
         motion : function (offset, width, height) {
             offset = offset || 60;
             let timeOff = offset / 1000,
@@ -69,14 +66,24 @@
                 }
             }
         },
+        // 縮放
+        scale: function(s) {
+            this.radius += s;
+        },
 
+        // 初始速度
         force : function (x, y) {
             this.velocity = {
                 x : x,
                 y : y
             }
-        }
+        },
 
+        // 加速度
+        strike : function(x, y) {
+            this.acceleration.x += x;
+            this.acceleration.y += y;
+        }
     }
 
     Ball.init = function (x, y, radius, color) {
