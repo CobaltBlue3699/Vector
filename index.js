@@ -17,7 +17,7 @@ window.requestAnimationFrame = (function(){
 
     // Configs
 
-    var BACKGROUND_COLOR      = 'rgba(0, 0, 0, .2)',//'rgba(11, 51, 56, 1)',
+    var BACKGROUND_COLOR      = 'rgba(11, 51, 56, 1)',
         DEFAULT_RADIUS        = 10,
         TIME                  = 0;
 
@@ -31,14 +31,8 @@ window.requestAnimationFrame = (function(){
         gui, control,
         balls = [],
         isAim = false, //是否瞄準中
-        currentPoint = {
-            x : 0,
-            y : 0
-        },
-        mouse = {
-            x: 0,
-            y: 0
-        };
+        currentPoint = Vector();
+        mouse = Vector();
 
     // Event Listeners
 
@@ -55,31 +49,24 @@ window.requestAnimationFrame = (function(){
 
         grad = context.createRadialGradient(cx, cy, 0, cx, cy, Math.sqrt(cx * cx + cy * cy));
         grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
     }
 
     function mouseMove(e) {
-        currentPoint.x = e.offsetX;
-        currentPoint.y = e.offsetY;
+        currentPoint.set(e.offsetX, e.offsetY);
         //canvas.style.cursor = hit ? 'pointer' : 'default';
     }
 
     function mouseDown(e) {
-        mouse.x = e.offsetX,
-        mouse.y = e.offsetY,
+        mouse.set(e.offsetX, e.offsetY);
         isAim = true;
     }
 
     function mouseUp(e) {
         let ball = Ball(e.offsetX, e.offsetY, DEFAULT_RADIUS, generateColor()),
-            mx = e.offsetX - mouse.x,
-            my = e.offsetY - mouse.y,
-            // angle = Math.atan2(e.offsetX, e.offsetY);
-            // angle = Math.atan2(mx, my);
-            angle = Math.atan(my / mx),
-            force = Math.sqrt(Math.pow(mx, 2) + Math.pow(my, 2)) * 10;
-            force = mx > 0 ? -force : force;
-        let vy = Math.sin(angle) * force,
+            angle = ball.angleTo(mouse),
+            force = ball.distanceTo(mouse) * 10,
+            vy = Math.sin(angle) * force,
             vx = Math.cos(angle) * force;
         ball.force(vx, vy);
         balls.push(ball);
@@ -121,7 +108,7 @@ window.requestAnimationFrame = (function(){
 
         context.fillStyle = ball.color;
         context.beginPath();
-        context.arc(ball.position.x, ball.position.y, ball.radius, 0, Math.PI * 2);
+        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
         context.fill();
 
         context.restore();
@@ -143,10 +130,20 @@ window.requestAnimationFrame = (function(){
         context.restore();
     }
 
+    // 角度換算弧度
+    function convertAngleToRadian(angle) {
+        return angle * Math.PI / 180;
+    }
+
+    // 弧度換算角度
+    function convertRadianToAngle(radian) {
+        return radian * 180 / Math.PI;
+    }
+
     // GUI Control
 
     control = {
-        particleNum: 100
+        graverty: 5
     };
 
 
@@ -215,3 +212,4 @@ window.requestAnimationFrame = (function(){
     loop();
 
 })();
+

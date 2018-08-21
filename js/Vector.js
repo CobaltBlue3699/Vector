@@ -54,25 +54,36 @@
         lengthSq: function() {
             return this.x * this.x + this.y * this.y;
         },
-    
+        
+        // 單位向量(正規化向量)
         normalize: function() {
-            var m = Math.sqrt(this.x * this.x + this.y * this.y);
+            var m = this.length();//Math.sqrt(this.x * this.x + this.y * this.y);
             if (m) {
                 this.x /= m;
                 this.y /= m;
             }
             return this;
         },
-    
+        
         angle: function() {
-            return Math.atan2(this.y, this.x);
+            return Math.atan2(this.y , this.x);
         },
-    
+        
         angleTo: function(v) {
             var dx = v.x - this.x,
                 dy = v.y - this.y;
-            return Math.atan2(dy, dx);
+            return Math.atan2(dy , dx);
         },
+
+        // angle: function() {
+        //     return Math.atan(this.y / this.x);
+        // },
+        
+        // angleTo: function(v) {
+        //     var dx = v.x - this.x,
+        //         dy = v.y - this.y;
+        //     return Math.atan(dy / dx);
+        // },
     
         distanceTo: function(v) {
             var dx = v.x - this.x,
@@ -85,7 +96,8 @@
                 dy = v.y - this.y;
             return dx * dx + dy * dy;
         },
-    
+        
+        // for x1, y1 To x2, y2 spend t time
         lerp: function(v, t) {
             this.x += (v.x - this.x) * t;
             this.y += (v.y - this.y) * t;
@@ -93,7 +105,7 @@
         },
     
         clone: function() {
-            return new Vector(this.x, this.y);
+            return Vector(this.x, this.y);
         },
     
         toString: function() {
@@ -108,27 +120,29 @@
         self.y = y;
     }
 
+    Vector.add = function(a, b) {
+        return Vector(a.x + b.x, a.y + b.y);
+    };
+    
+    Vector.sub = function(a, b) {
+        return Vector(a.x - b.x, a.y - b.y);
+    };
+    
+    Vector.scale = function(v, s) {
+        return v.clone().scale(s);
+    };
+    
+    Vector.random = function() {
+        return Vector(
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1
+        );
+    };
+
     Vector.init.prototype = Vector.prototype;
 
     global.Vector = global.$V = Vector;
 }));
 
-// Vector.add = function(a, b) {
-//     return new Vector(a.x + b.x, a.y + b.y);
-// };
 
-// Vector.sub = function(a, b) {
-//     return new Vector(a.x - b.x, a.y - b.y);
-// };
-
-// Vector.scale = function(v, s) {
-//     return v.clone().scale(s);
-// };
-
-// Vector.random = function() {
-//     return new Vector(
-//         Math.random() * 2 - 1,
-//         Math.random() * 2 - 1
-//     );
-// };
 
