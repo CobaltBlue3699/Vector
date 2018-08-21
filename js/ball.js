@@ -26,7 +26,7 @@
     }
     
     Ball.prototype = (function (o) { // Ball.x .y -> position
-        var s = new Vector(0, 0), p;
+        var s = Vector(0, 0), p;
         for (p in o) s[p] = o[p];
         return s;
     }({
@@ -37,7 +37,6 @@
         // X0 = X0 + VT 
         // F = ma => F 表示物體所受淨外力，m為物體質量, a 為物體的加速度。
         
-
         motion : function (offset, width, height) {
             offset = offset || 60;
             let timeOff = offset / 1000,
@@ -110,8 +109,17 @@
         self.color = color || defaultColor;
     }
 
+    Ball.setGraverty = function (g) {
+        graverty = g;
+    }
+
+    Ball.setFriction = function (f) {
+        friction = f;
+    }
+
     Ball.init.prototype = Ball.prototype;
 
     global.Ball = Ball;
 
 }));
+

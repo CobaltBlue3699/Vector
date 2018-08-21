@@ -143,7 +143,8 @@ window.requestAnimationFrame = (function(){
     // GUI Control
 
     control = {
-        graverty: 5
+        graverty: 5,
+        friction: 0.8
     };
 
 
@@ -165,21 +166,17 @@ window.requestAnimationFrame = (function(){
 
     // GUI
 
-    // gui = new dat.GUI();
-    // gui.add(control, 'particleNum', 0, 500).step(1).name('Particle Num').onChange(function() {
-    //     var n = (control.particleNum | 0) - particles.length;
-    //     if (n > 0)
-    //         addParticle(n);
-    //     else if (n < 0)
-    //         removeParticle(-n);
-    // });
-    // gui.add(GravityPoint, 'interferenceToPoint').name('Interference Between Point');
-    // gui.close();
+    gui = new dat.GUI();
+    gui.add(control, 'graverty', -10, 10).step(1).name('graverty').onChange(function(data) {
+        Ball.setGraverty(data);
+    });
+    gui.add(control, 'friction', 0.0, 1.0).step(.1).name('friction').onChange(function(data) {
+        Ball.setFriction(data);
+    });
+    gui.close();
 
 
     // Start Update
-    
-    
 
     var loop = function(t) {
         var i, len, ball, p;
